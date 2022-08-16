@@ -1,54 +1,32 @@
 import Container from 'react-bootstrap/Container'
 import { useQuery } from 'react-query'
 import BooksAPI from '../services/BooksAPI'
-import ListGroup from 'react-bootstrap/ListGroup';
-import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col'
-import { Link } from 'react-router-dom'
-import Button from 'react-bootstrap/Button'
+import BookCard from '../components/BookCard';
+import WarningAlert from '../components/alerts/WarningAlert';
 
 const BooksPage = () => {
-	const { isLoading, isError, error, data } = useQuery(['books'], BooksAPI.getBooks)
+	const { isLoading, isError, error, data } = useQuery('books', BooksAPI.getBooks)
 
 	console.log(data)
 
 	return (
 		<Container className="py-3">
 
-		<h1>Welcome to our library!</h1>
+		<h1>Books</h1>
 
 		{isLoading && (<p>Loading books...</p>)}
 
-		{isError && (<p>An error occurred: {error.message}</p>)}
+		{isError && <WarningAlert message={error.message} />}
 
 		{data && (
 				<Row  className="bookslist">
-					{data.map(book => 
-					<Col lg={4} md={6} sm={12}>
-						<Card className="mb-3" key={book.id}>
-							<Card.Header>{book.title}</Card.Header>
-							<Card.Body>
-								<ListGroup lg={3} variant="flush">
-									<ListGroup.Item>
-									<strong>Book: </strong> {book.title}
-									</ListGroup.Item>
-									<ListGroup.Item>
-										<strong>Published</strong> {book.published}
-									</ListGroup.Item>
-									<ListGroup.Item>
-										<strong>Pages: </strong>
-										{book.pages} 
-									</ListGroup.Item>
-									<ListGroup.Item>
-										<strong>Author: </strong>
-										{book.author.name} 
-									</ListGroup.Item>
-								</ListGroup>
-							</Card.Body>
-						</Card>
-					</Col>
-					)}
+					{data.map((book, i) => ( 
+						<Col lg={4} md={6} sm={12} key={i}>
+							<BookCard book={book} />
+						</Col>
+					))}
 
 				</Row>
 		)}
