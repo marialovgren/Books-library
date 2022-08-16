@@ -3,9 +3,11 @@ import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import { Link, NavLink } from 'react-router-dom'
 import useBooks from '../hooks/useBooks'
+import useAuthors from '../hooks/useAuthors'
 
 const Navigation = () => {
 	const { data: books } = useBooks()
+	const { data: authors } = useAuthors()
 
 	return (
 		<Navbar bg="dark" variant="dark" expand="md">
@@ -18,7 +20,12 @@ const Navigation = () => {
 						<Nav.Link as={NavLink} end to="/books">
 							Books 
 							{books ? `(${books.length})` : ''}
-							</Nav.Link>
+						</Nav.Link>
+
+						<Nav.Link as={NavLink} end to="/authors">
+							Authors 
+							{authors ? `(${authors.length})` : ''}
+						</Nav.Link>
 					</Nav>
 				</Navbar.Collapse>
 			</Container>

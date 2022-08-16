@@ -5,6 +5,8 @@ import BooksPage from './pages/BooksPage'
 import HomePage from './pages/HomePage'
 import NotFound from './pages/NotFound'
 import './assets/scss/App.scss'
+import AuthorsPage from './pages/AuthorsPage'
+import AuthorPage from './pages/AuthorPage'
 
 function App() {
 	return (
@@ -14,6 +16,8 @@ function App() {
 			<Routes>
 				<Route path="/" element={<HomePage />} />
 				<Route path="/books" element={<BooksPage />} />
+				<Route path="/authors" element={<AuthorsPage />} />
+				<Route path="/authors/:id" element={<AuthorPage />} />
 				<Route path="*" element={<NotFound />} />
 			</Routes>
 

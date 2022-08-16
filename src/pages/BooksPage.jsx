@@ -8,27 +8,27 @@ import useBooks from '../hooks/useBooks';
 const BooksPage = () => {
 	const { isLoading, isError, error, data } = useBooks()
 
-	console.log(data)
-
 	return (
 		<Container className="py-3">
 
-		<h1>Books</h1>
+			<h1>Books</h1>
 
-		{isLoading && (<p>Loading books...</p>)}
+			{isLoading && (<p>Loading books...</p>)}
 
-		{isError && <WarningAlert message={error.message} />}
+			{isError && <WarningAlert message={error.message} />}
 
-		{data && (
-				<Row  className="bookslist">
-					{data.map((book, i) => ( 
-						<Col lg={4} md={6} sm={12} key={i}>
-							<BookCard book={book} />
-						</Col>
-					))}
+			{data && (
+					<Row  className="bookslist">
+						{data.map((book, i) => ( 
+							<Col lg={4} md={6} sm={12} key={i}>
+								<BookCard book={book} />
+							</Col>
+						))}
 
-				</Row>
-		)}
+					</Row>
+			)}
+
+
 		</Container>
 	)
 }
