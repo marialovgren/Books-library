@@ -2,26 +2,17 @@ import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
 import Form from 'react-bootstrap/Form'
 import { useForm } from 'react-hook-form'
-import { useMutation, useQueryClient } from 'react-query'
-import BooksAPI from '../../services/BooksAPI' 
+import useCreateAuthor from '../../hooks/useCreateAuthor'
 
 const CreateAuthorForm = () => {
 	const { register, handleSubmit, formState: { errors } } = useForm()
-	const queryClient = useQueryClient()
-	const createAuthorMutation = useMutation(BooksAPI.createAuthor, { 
-		onSuccess: () => {
-			// invalidate datan så att listan över författare hämtas på nytt
-			queryClient.invalidateQueries('authors')
-		}
-	})
-
-	// När man klickar på Submit-knappen så ska det som står i onCreateAuthor köras. Det räcker att skicka in data, vilket är name och date_of_birth. JSON-server sätter själv id och tar nästa lediga id. 
-	const onCreateAuthor = data => {
-		createAuthorMutation.mutate( data )
-	}
+	
+	// useCreateAuthor kommer från hooken useCreateAuthor som i sin tur invaliderar 'authors' när man klickar på Submit så att listan över författarna uppdateras
+	const createAuthorMutation = useCreateAuthor()
 
 	return (
-		<Form onSubmit={handleSubmit(onCreateAuthor)} noValidate >
+		// När man klickar på Submit-knappen så ska createAuthorMutation.mutate köras. Som default är den första parametern data, vilket innebär att datan som är ifylld skickas till databasen. 
+		<Form onSubmit={handleSubmit( createAuthorMutation.mutate )} noValidate >
 			{createAuthorMutation.isSuccess && <Alert variant="success">Author created!</Alert>}
 			<Form.Group className='mb-3' controlId='name'>
 				<Form.Label>Author Name</Form.Label>
@@ -53,6 +44,7 @@ const CreateAuthorForm = () => {
 			<Button 
 				variant='success' 
 				type='submit' 
+				disabled={createAuthorMutation.isLoading}
 				>Create
 			</Button>
 		</Form>
