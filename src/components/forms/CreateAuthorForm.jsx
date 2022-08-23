@@ -1,20 +1,28 @@
 import Button from 'react-bootstrap/Button'
+import Alert from 'react-bootstrap/Alert'
 import Form from 'react-bootstrap/Form'
 import { useForm } from 'react-hook-form'
-import { useMutation } from 'react-query'
-import BooksAPI from '../../services/BooksAPI'
+import { useMutation, useQueryClient } from 'react-query'
+import BooksAPI from '../../services/BooksAPI' 
 
 const CreateAuthorForm = () => {
 	const { register, handleSubmit, formState: { errors } } = useForm()
+	const queryClient = useQueryClient()
+	const createAuthorMutation = useMutation(BooksAPI.createAuthor, { 
+		onSuccess: () => {
+			// invalidate datan så att listan över författare hämtas på nytt
+			queryClient.invalidateQueries('authors')
+		}
+	})
 
-	const mutation = useMutation(BooksAPI.createAuthor)
-
+	// När man klickar på Submit-knappen så ska det som står i onCreateAuthor köras. Det räcker att skicka in data, vilket är name och date_of_birth. JSON-server sätter själv id och tar nästa lediga id. 
 	const onCreateAuthor = data => {
-			mutation.mutate( data )
+		createAuthorMutation.mutate( data )
 	}
 
 	return (
 		<Form onSubmit={handleSubmit(onCreateAuthor)} noValidate >
+			{createAuthorMutation.isSuccess && <Alert variant="success">Author created!</Alert>}
 			<Form.Group className='mb-3' controlId='name'>
 				<Form.Label>Author Name</Form.Label>
 				<Form.Control

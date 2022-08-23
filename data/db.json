@@ -135,6 +135,11 @@
       "name": "Agatha Christie",
       "date_of_birth": "2022-08-02",
       "id": 10
+    },
+    {
+      "name": "Astrid Lindgren",
+      "date_of_birth": "1900-11-22",
+      "id": 11
     }
   ]
 }

@@ -121,7 +121,7 @@ const updateAuthor = async (author_id, data) => {
  * @param author_id Author to delete
  */
 const deleteAuthor = async (author_id) => {
-    const res = await axios.delete(`/authors/${authors_id}`)
+    const res = await axios.delete(`/authors/${author_id}`)
     return res.data
 }
  
