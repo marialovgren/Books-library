@@ -1,36 +1,32 @@
 import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row';
-import AuthorCard from '../components/AuthorCard';
-import WarningAlert from '../components/alerts/WarningAlert';
-import useAuthor from '../hooks/useAuthor';
 import { useParams } from 'react-router-dom'
+import LoadingSpinner from '../components/LoadingSpinner'
+import WarningAlert from '../components/alerts/WarningAlert'
+import useAuthor from '../hooks/useAuthor'
 
 const AuthorPage = () => {
 	const { id } = useParams()
-	const { data: authors, isLoading, isError, error } = useAuthor(id)
-
-	console.log(id)
+	const { data: author, error, isError, isLoading } = useAuthor(id)
 
 	return (
 		<Container className="py-3">
-
-			<h1>Author</h1>
-
-			{isLoading && (<p>Loading author...</p>)}
+			{isLoading && <LoadingSpinner />}
 
 			{isError && <WarningAlert message={error.message} />}
 
-			{authors && (
-					<Row  className="authorCard">
-						<AuthorCard authors={authors}  />
-					
-					</Row>
-			)}
+			{author && <>
+				<h1>{author.name}</h1>
 
+				<p>Born: {author.date_of_birth}</p>
 
+				<ul>
+					{author.books.map(book => (
+						<li key={book.id}>{book.title}</li>
+					))}
+				</ul>
+			</>}
 		</Container>
 	)
 }
 
 export default AuthorPage
-

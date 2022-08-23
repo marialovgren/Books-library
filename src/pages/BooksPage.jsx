@@ -1,37 +1,45 @@
+import { useMemo } from 'react'
 import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col'
-import BookCard from '../components/BookCard';
-import WarningAlert from '../components/alerts/WarningAlert';
-import useBooks from '../hooks/useBooks';
+import LoadingSpinner from '../components/LoadingSpinner'
+import WarningAlert from '../components/alerts/WarningAlert'
+import SortableTable from '../components/SortableTable'
+import useBooks from '../hooks/useBooks'
 
 const BooksPage = () => {
-	const { isLoading, isError, error, data } = useBooks()
+	const { data: books, error, isError, isLoading } = useBooks()
+
+	const columns = useMemo(() => {
+		return [
+			{
+				Header: 'Book Title',
+				accessor: 'title',
+			},
+			{
+				Header: 'Author',
+				accessor: 'author.name',
+			},
+			{
+				Header: 'Pages',
+				accessor: 'pages',
+			},
+			{
+				Header: 'Published',
+				accessor: 'published',
+			},
+		]
+	}, [])
 
 	return (
 		<Container className="py-3">
-
 			<h1>Books</h1>
 
-			{isLoading && (<p>Loading books...</p>)}
+			{isLoading && <LoadingSpinner />}
 
 			{isError && <WarningAlert message={error.message} />}
 
-			{data && (
-					<Row  className="bookslist">
-						{data.map((book, i) => ( 
-							<Col lg={4} md={6} sm={12} key={i}>
-								<BookCard book={book} />
-							</Col>
-						))}
-
-					</Row>
-			)}
-
-
+			{books && <SortableTable columns={columns} data={books} />}
 		</Container>
 	)
 }
 
 export default BooksPage
-
