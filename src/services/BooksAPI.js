@@ -93,6 +93,37 @@
  const getAuthor = (id) => {
 	 return get(`/authors/${id}?_embed=books`)
  }
+
+ /**
+  * Create a new author
+  *
+  * @param data Object with properties and values for the new author
+  */
+  const createAuthor = async (data) => {
+    const res = await axios.post(`/authors`, data)
+    return res.data
+}
+
+/**
+ * Update an author
+ *
+ * @param author_id Author to update
+ * @param data Data to update author with
+ */
+const updateAuthor = async (author_id, data) => {
+    const res = await axios.patch(`/authors/${author_id}`, data)
+    return res.data
+}
+
+/**
+ * Delete an author
+ *
+ * @param author_id Author to delete
+ */
+const deleteAuthor = async (author_id) => {
+    const res = await axios.delete(`/authors/${authors_id}`)
+    return res.data
+}
  
  const exports = {
 	 getBooks,
@@ -102,6 +133,9 @@
 	 deleteBook,
 	 getAuthors,
 	 getAuthor,
+     createAuthor,
+	 updateAuthor,
+	 deleteAuthor,
  }
  
  export default exports
